@@ -1,15 +1,9 @@
 import axios from 'axios';
-const getBaseURL = (gistID) => `https://api.github.com/gists/${gistID}/comments`;
-/**
- * List comments on a gist: GET /gists/:gist_id/comments
- * Get a single comment: GET /gists/:gist_id/comments/:comment_id
- * Create a comment: POST /gists/:gist_id/comments
- * Edit a comment: PATCH /gists/:gist_id/comments/:comment_id
- * Delete a comment: DELETE /gists/:gist_id/comments/:comment_id
- */
+const getBaseURL = (gistID) => `https://api.github.com/gists/${gistID}`;
+
 export default class AntDataStore {
 
-  constructor({debuggerMode = false, gistID, token}) {
+  constructor({ debuggerMode = false, gistID, token }) {
     this.debuggerMode = debuggerMode;
     this.log = (...args) => this.debuggerMode && console.log(...args);
     this.baseURL = getBaseURL(gistID);
@@ -25,10 +19,10 @@ export default class AntDataStore {
       timeout: 10000,
     })
   }
-  // List comments on a gist
+  
   listData() {
     return this.request
-    .get()
+    .get(`/comments?d=${+new Date()}`)
     .then((response) => {
       this.log('List Data Response:', response);
       if (response.status === 200) {
@@ -47,10 +41,10 @@ export default class AntDataStore {
       }
     });
   }
-  // Get a single comment
+  
   getData(id) {
     return this.request
-    .get(`/${id}`)
+    .get(`/comments/${id}?d=${+new Date()}`)
     .then((response) => {
       this.log('Get Singal Data Response:', response);
       if (response.status === 200) {
@@ -67,10 +61,10 @@ export default class AntDataStore {
       }
     });
   }
-  // Create a comment
+  
   createData(data) {
     return this.request
-    .post('', {
+    .post(`/comments?d=${+new Date()}`, {
       body: data
     })
     .then((response) => {
@@ -89,10 +83,10 @@ export default class AntDataStore {
       }
     });
   }
-  // Edit a comment
+  
   patchData(id, data) {
     return this.request
-    .patch(`${id}`, {
+    .patch(`/comments/${id}?d=${+new Date()}`, {
       body: data
     })
     .then((response) => {
@@ -111,10 +105,10 @@ export default class AntDataStore {
       }
     });
   }
-  // Delete a comment 
+  
   deleteData(id)  {
     return this.request
-    .delete(`/${id}`)
+    .delete(`/comments/${id}?d=${+new Date()}`)
     .then((response) => {
       this.log('Delete Singal Data Response:', response);
       if (response.status === 204) {
