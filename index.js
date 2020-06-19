@@ -65,7 +65,7 @@ export default class AntDataStore {
   createData(data) {
     return this.request
     .post(`/comments?d=${+new Date()}`, {
-      body: data
+      body: JSON.stringfy(data)
     })
     .then((response) => {
       this.log('Create Data Response:', response);
@@ -87,7 +87,7 @@ export default class AntDataStore {
   patchData(id, data) {
     return this.request
     .patch(`/comments/${id}?d=${+new Date()}`, {
-      body: data
+      body: JSON.stringfy(data)
     })
     .then((response) => {
       this.log('Patch Data Response:', response);
